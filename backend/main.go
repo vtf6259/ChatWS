@@ -1,0 +1,72 @@
+package main
+
+import (
+	_ "embed"
+	"fmt"
+	"os"
+	"strconv"
+	"strings"
+)
+
+const version = "Indev 0.0.1"
+
+var port int
+
+//go:embed logo.ansi
+var logoansi string // generated with https://github.com/cacalabs/libcaca/tree/69a42132350da166a98afe4ab36d89008197b5f2
+
+func progname(input string) string {
+	lastSlashIndex := strings.LastIndex(input, "/")
+	if lastSlashIndex != -1 {
+		return input[lastSlashIndex+1:]
+	} else {
+		lastSlashIndex := strings.LastIndex(input, "\\")
+		if lastSlashIndex != -1 {
+			fmt.Println("\\ Paths detected we do not do anything different other than path stuff so do not expect stuff to 100% work on windows")
+			return input[lastSlashIndex+1:]
+		}
+	}
+	return input
+}
+
+func displayHelp() {
+	fmt.Printf("[%s]: The ChatWS Backend\n", progname(os.Args[0]))
+	fmt.Println("Options: ")
+	fmt.Println("	--help: Display this help message and exit")
+	fmt.Println("	--version: Display the version and exit")
+	fmt.Println("	--port: The port to run the server on. (The default port for the ChatWS frontend is 8098)")
+}
+
+func main() {
+	if len(os.Args) == 1 {
+		displayHelp()
+		os.Exit(0)
+	}
+	var indexToIgnore int
+	for index, arg := range os.Args {
+		switch arg {
+		case "--help":
+			displayHelp()
+			os.Exit(0)
+		case "--version":
+			fmt.Printf("%s Version %s\n", progname(os.Args[0]), version)
+			os.Exit(0)
+		case "--port":
+			portToSet, err := strconv.Atoi(os.Args[index+1])
+			indexToIgnore = index + 1
+			if err != nil {
+				fmt.Printf("Invalid port %s\n", os.Args[index+1])
+				os.Exit(0)
+			}
+			fmt.Printf("Port: %d\n", portToSet) // dntger
+			port = portToSet
+		default:
+			if index != 0 && index != indexToIgnore {
+				fmt.Printf("Unknown option %s\n", arg)
+				os.Exit(1)
+			}
+			continue
+		}
+	}
+	fmt.Printf("%s", logoansi)
+}
