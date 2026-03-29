@@ -1,14 +1,51 @@
 package main
 
 import (
+	"crypto/rand"
 	"fmt"
 	"io"
 	"log"
 	"net/http"
 	"strconv"
+	"strings"
 
+	"github.com/ProtonMail/gopenpgp/v3/crypto"
 	"github.com/gorilla/websocket"
 )
+
+type userType struct {
+	remoteAddr          string
+	randomText          string
+	encryptedRandomText string
+	username            string
+	authed              bool
+}
+
+func getAuth(wsClient *websocket.Conn) bool {
+	pgp := crypto.PGP()
+	randomText := rand.Text()
+	var user userType
+	for {
+		_, messageByte, _ := wsClient.ReadMessage()
+		var message string
+		for _, content := range messageByte {
+			message = message + string(content)
+		}
+		messages := strings.Fields(message)
+		if messages[0] == "USER" {
+			user.randomText = randomText
+			user.username = messages[1] // TODO: Do bounds checking before 1.0
+			wsClient.WriteMessage(0, []byte("CHALLENGE "+pgppubkey))
+		} else if messages[0] == "AUTH" {
+			decryptHandle, _ := crypto.NewPrivateKeyFromArmored(pgpprivkey, []byte("")) // TODO: error checking before 1.0
+			_ = decryptHandle
+			_ = pgp
+		} else {
+			wsClient.WriteMessage(0, []byte("FAILAUTH"))
+			continue
+		}
+	}
+}
 
 func corsIsTheDumbestThingEver(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -37,6 +74,12 @@ func handleWSClient(httpClient http.ResponseWriter, httpRequest *http.Request) {
 	wsClient, err := wsUpgrader.Upgrade(httpClient, httpRequest, nil)
 	if err != nil {
 		fmt.Printf("Websocket upgrade failed: %s\n", err.Error())
+		return
+	}
+	wsClient.WriteMessage(0, []byte("MOTD "+motd))
+	authDone := getAuth(wsClient)
+	if !authDone {
+		prodLogln(httpRequest.RemoteAddr + " Failed auth")
 		return
 	}
 	for {
@@ -68,6 +111,7 @@ func handleIndex(httpClient http.ResponseWriter, httpRequest *http.Request) {
 }
 
 func runServer(port int) {
+	//pgp := crypto.PGP()
 	mux := http.NewServeMux()
 	mux.HandleFunc("/ws", handleWSClient)
 	mux.HandleFunc("/", handleIndex)

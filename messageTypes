@@ -1,0 +1,10 @@
+MOTD: Message of the day *NOMOTD* if there is no motd
+USER: username
+CHALLENGE: A pgp encryption challenge to prove account ownership
+AUTH: The encrypted CHALLENGE value
+FAILAUTH: The decrypted AUTH result does not match the CHALLENGE value
+AUTHSUC: The decrypted AUTH result does match the CHALLENGE value
+MESSAGE: Message to send
+CONFIRM: Basically TCP ACK but in this websocket protocol
+BAN: If the AUTH result failed to decrypt
+KICK: Kick a user via closing the wsClient

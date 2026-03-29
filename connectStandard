@@ -1,6 +1,7 @@
+< MOTD <the motd> (if there is no motd it will be *NOMOTD*)
 > USER <username>
 < CHALLENGE <random text> <server public pgp key>
-> AUTH <random text signed with users private key>
+> AUTH <random text encrypted with server public key>
 (if failed)
 < FAILAUTH
 retry
