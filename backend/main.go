@@ -9,6 +9,15 @@ import (
 )
 
 const version = "Indev 0.0.1"
+const sensOn = false
+
+func sens(sensitive any) any {
+	if sensOn {
+		return "REDACTED"
+	} else {
+		return sensitive
+	}
+}
 
 var port int
 
