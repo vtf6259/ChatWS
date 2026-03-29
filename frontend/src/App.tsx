@@ -1,7 +1,7 @@
 export default function App() {
   return (
     <>
-    Hello
+    <h1>ChatWS frontend is not ready yet</h1>
     </>
   )
 }
