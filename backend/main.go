@@ -22,7 +22,7 @@ func progname(input string) string {
 	} else {
 		lastSlashIndex := strings.LastIndex(input, "\\")
 		if lastSlashIndex != -1 {
-			fmt.Println("\\ Paths detected we do not do anything different other than path stuff so do not expect stuff to 100% work on windows")
+			fmt.Println("Windows style paths detectedd (\\) we do not do anything different other than path stuff so do not expect stuff to 100% work on windows")
 			return input[lastSlashIndex+1:]
 		}
 	}
@@ -58,7 +58,6 @@ func main() {
 				fmt.Printf("Invalid port %s\n", os.Args[index+1])
 				os.Exit(0)
 			}
-			fmt.Printf("Port: %d\n", portToSet) // dntger
 			port = portToSet
 		default:
 			if index != 0 && index != indexToIgnore {
@@ -69,4 +68,6 @@ func main() {
 		}
 	}
 	fmt.Printf("%s", logoansi)
+	fmt.Printf("Running on port: %d\n", port) // dntger
+	runServer(port)
 }
