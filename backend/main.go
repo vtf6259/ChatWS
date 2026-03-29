@@ -10,6 +10,25 @@ import (
 
 const version = "Indev 0.0.1"
 const sensOn = false
+const inProd = false
+
+var genTls bool = false
+var useTls bool = false
+
+func prodLogln(toLog ...any) (any, error) {
+	if inProd {
+		return nil, nil
+	}
+	res, err := fmt.Println(toLog...)
+	return res, err
+}
+func prodLogf(toLog string, formats ...any) (any, error) {
+	if inProd {
+		return nil, nil
+	}
+	res, err := fmt.Printf(toLog, formats...)
+	return res, err
+}
 
 func sens(sensitive any) any {
 	if sensOn {
@@ -44,6 +63,10 @@ func displayHelp() {
 	fmt.Println("	--help: Display this help message and exit")
 	fmt.Println("	--version: Display the version and exit")
 	fmt.Println("	--port: The port to run the server on. (The default port for the ChatWS frontend is 8098)")
+	fmt.Println("	--gentls: Generate a tls cert")
+	fmt.Println("	--usetls: Use tls")
+	fmt.Println("	--tlspubkey: The tls public key")
+	fmt.Println("	--tlsprivkey: The tls private key")
 }
 
 func main() {
@@ -68,6 +91,16 @@ func main() {
 				os.Exit(0)
 			}
 			port = portToSet
+		case "--gentls":
+			genTls = true
+			fmt.Println("Unimplemented")
+		case "--usetls":
+			useTls = true
+			fmt.Println("Unimplemented")
+		case "--tlspubkey":
+			fmt.Println("Unimplemented")
+		case "--tlsprivkey":
+			fmt.Println("Unimplemented")
 		default:
 			if index != 0 && index != indexToIgnore {
 				fmt.Printf("Unknown option %s\n", arg)

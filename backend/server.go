@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"io"
 	"log"
 	"net/http"
 	"strconv"
@@ -62,8 +63,13 @@ func handleWSClient(httpClient http.ResponseWriter, httpRequest *http.Request) {
 	}
 }
 
+func handleIndex(httpClient http.ResponseWriter, httpRequest *http.Request) {
+	io.WriteString(httpClient, "<h1>TODO: put frontend in here maybe</h1>")
+}
+
 func runServer(port int) {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/ws", handleWSClient)
+	mux.HandleFunc("/", handleIndex)
 	log.Fatal(http.ListenAndServe(":"+strconv.Itoa(port), corsIsTheDumbestThingEver(mux)))
 }
