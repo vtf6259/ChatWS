@@ -4,6 +4,7 @@ let connected: boolean = false
 
 
 function connectWS(url: string, webSocket: WebSocket, setWebSocket: React.Dispatch<React.SetStateAction<WebSocket>>) {
+  void(webSocket)
   if(connected == true) {
     console.log("already connected")
     return
