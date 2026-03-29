@@ -1,0 +1,1 @@
+There is no AI allowed except for small things and fixing hard errors, AI Is not allowed to do big things
