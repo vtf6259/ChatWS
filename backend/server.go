@@ -41,14 +41,23 @@ func handleWSClient(httpClient http.ResponseWriter, httpRequest *http.Request) {
 	for {
 		_, messageByte, err := wsClient.ReadMessage()
 		if err != nil {
+			if err == websocket.ErrCloseSent {
+				return
+			}
 			fmt.Println("Error: ", err)
-			continue
+			wsClient.WriteMessage(1, []byte("ERROR IN WS LOOP: "+err.Error()))
+			return
 		}
 		var message string
 		for _, content := range messageByte {
 			message = message + string(content)
 		}
-		fmt.Println(httpRequest.RemoteAddr, "Said:", message)
+		if message == "closing" {
+			fmt.Printf("Say bye to %s\n", sens(httpRequest.RemoteAddr))
+			wsClient.Close()
+			return
+		}
+		fmt.Println(sens(httpRequest.RemoteAddr), "Said:", message)
 		wsClient.WriteMessage(1, []byte("Hello"))
 	}
 }

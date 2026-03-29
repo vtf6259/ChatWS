@@ -1,0 +1,11 @@
+> USER <username>
+< CHALLENGE <random text> <server public pgp key>
+> AUTH <random text signed with users private key>
+(if failed)
+< FAILAUTH
+retry
+(if sucess)
+< AUTHSUC
+continue
+> MESSAGE <message> (will use RemoteAddr for username no auth needed at this point (most likely))
+< CONFIRM
