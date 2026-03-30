@@ -174,6 +174,7 @@ func main() {
 	}
 	pgppubkeycrypto, err = crypto.NewKeyFromArmored(string(pgppubkeydata))
 	fmt.Printf("%s", logoansi)
+	fmt.Printf("ChatWS is licensed under the AGPLv3\n ChatWS uses the Gorilla websocket library which is licensed under the BSD2 clause\n ChatWS also uses Gopenpgp which is licensed under the MIT license")
 	fmt.Printf("Running on port: %d\n", port) // dntger
 	runServer(port)
 }

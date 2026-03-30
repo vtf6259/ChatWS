@@ -2,6 +2,7 @@ package main
 
 import (
 	"crypto/rand"
+	"encoding/base64"
 	"fmt"
 	"io"
 	"log"
@@ -54,6 +55,13 @@ func getAuth(wsClient *websocket.Conn) bool {
 				wsClient.WriteMessage(1, []byte("FAILAUTH"))
 			}
 			prodLogln(sens(randomTextDecrypted))
+		case "REQPUBKEY":
+			pubkey, _ := pgppubkeycrypto.Armor()
+			pubkeybase64 := base64.StdEncoding.EncodeToString([]byte(pubkey))
+			pubkeybase64 = strings.ReplaceAll(pubkeybase64, "\n", "") // just incase
+			wsClient.WriteMessage(1, []byte("PUBKEY "+pubkeybase64))
+		case "RESEND":
+			wsClient.WriteMessage(1, []byte("CHALLENGE "+randomText+" "+pgppubkeycrypto.GetHexKeyID()))
 		default:
 			wsClient.WriteMessage(1, []byte("FAILAUTH"))
 			continue
