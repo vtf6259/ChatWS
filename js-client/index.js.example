@@ -1,0 +1,15 @@
+let ip
+let username = "nodejsdev"
+let wsServer = new WebSocket("ws://127.0.0.1:8098/ws")
+const readline = require('node:readline');
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout,
+});
+
+wsServer.addEventListener("message", (event) => {
+    console.log("got message ", event.data)
+})
+wsServer.addEventListener("open", () => {
+    wsServer.send("USER " + username)
+})

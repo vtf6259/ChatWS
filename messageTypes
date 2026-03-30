@@ -8,3 +8,6 @@ MESSAGE: Message to send
 CONFIRM: Basically TCP ACK but in this websocket protocol
 BAN: If the AUTH result failed to decrypt
 KICK: Kick a user via closing the wsClient
+REQPUBKEY: Request the server pgp public key (ONLY DURING AUTH)
+PUBKEY: Base64 encoded public key (ONLY DURING AUTH)
+RESEND: Resend challenge (ONLY DURING AUTH)

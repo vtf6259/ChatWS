@@ -4,3 +4,4 @@ go mod download
 go build
 cp ChatWS ../build
 strip ../build/ChatWS
+cp ../THIRDPARTY-LICENSES ../build
