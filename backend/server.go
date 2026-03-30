@@ -31,17 +31,31 @@ func getAuth(wsClient *websocket.Conn) bool {
 		for _, content := range messageByte {
 			message = message + string(content)
 		}
-		messages := strings.Fields(message)
-		if messages[0] == "USER" {
+		messages := strings.SplitN(message, " ", 2)
+		switch messages[0] {
+		case "USER":
+			prodLogln("USER " + messages[1])
 			user.randomText = randomText
 			user.username = messages[1] // TODO: Do bounds checking before 1.0
-			wsClient.WriteMessage(0, []byte("CHALLENGE "+pgppubkey))
-		} else if messages[0] == "AUTH" {
-			decryptHandle, _ := crypto.NewPrivateKeyFromArmored(pgpprivkey, []byte("")) // TODO: error checking before 1.0
-			_ = decryptHandle
-			_ = pgp
-		} else {
-			wsClient.WriteMessage(0, []byte("FAILAUTH"))
+			err := wsClient.WriteMessage(1, []byte("CHALLENGE "+randomText+" "+pgppubkeycrypto.GetHexKeyID()))
+			prodLogln(err)
+			prodLogln(messages)
+			prodLogln(sens(user))
+		case "AUTH":
+			prodLogln(sens(messages[1]))
+			privateKey, _ := crypto.NewPrivateKeyFromArmored(pgpprivkey, []byte("")) // TODO: error checking before 1.0
+			decHandle, _ := pgp.Decryption().DecryptionKey(privateKey).New()
+			randomTextDecrypted, _ := decHandle.Decrypt([]byte(messages[1]), crypto.Armor)
+			if randomTextDecrypted.String() == user.randomText {
+				wsClient.WriteMessage(1, []byte("AUTHSUC"))
+				user.authed = true
+				return true
+			} else {
+				wsClient.WriteMessage(1, []byte("FAILAUTH"))
+			}
+			prodLogln(sens(randomTextDecrypted))
+		default:
+			wsClient.WriteMessage(1, []byte("FAILAUTH"))
 			continue
 		}
 	}
