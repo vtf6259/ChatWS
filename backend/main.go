@@ -44,6 +44,7 @@ func sens(sensitive any) any {
 }
 
 var port int
+var windowsMentioned bool
 var pgpprivkey string = ""
 var pgppubkey string = ""
 
@@ -57,7 +58,10 @@ func progname(input string) string {
 	} else {
 		lastSlashIndex := strings.LastIndex(input, "\\")
 		if lastSlashIndex != -1 {
-			fmt.Println("Windows style paths detectedd (\\) we do not do anything different other than path stuff so do not expect stuff to 100% work on windows")
+			if !windowsMentioned {
+				fmt.Println("Windows style paths detected (\\) we do not do anything different other than path stuff so do not expect stuff to 100% work on windows")
+				windowsMentioned = true
+			}
 			return input[lastSlashIndex+1:]
 		}
 	}
@@ -174,7 +178,7 @@ func main() {
 	}
 	pgppubkeycrypto, err = crypto.NewKeyFromArmored(string(pgppubkeydata))
 	fmt.Printf("%s", logoansi)
-	fmt.Printf("ChatWS is licensed under the AGPLv3\n ChatWS uses the Gorilla websocket library which is licensed under the BSD2 clause\n ChatWS also uses Gopenpgp which is licensed under the MIT license")
+	fmt.Printf("ChatWS is licensed under the AGPLv3\n ChatWS uses the Gorilla websocket library which is licensed under a BSD style license\n ChatWS also uses Gopenpgp which is licensed under the MIT license\n")
 	fmt.Printf("Running on port: %d\n", port) // dntger
 	runServer(port)
 }

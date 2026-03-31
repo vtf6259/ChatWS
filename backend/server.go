@@ -7,6 +7,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"os"
 	"strconv"
 	"strings"
 
@@ -137,5 +138,10 @@ func runServer(port int) {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/ws", handleWSClient)
 	mux.HandleFunc("/", handleIndex)
+	if windowsMentioned {
+		fmt.Println("Windows style paths detected (\\) we do not do anything different other than path stuff so do not expect stuff to 100% work on windows")
+	} else {
+		_ = progname(os.Args[0])
+	}
 	log.Fatal(http.ListenAndServe(":"+strconv.Itoa(port), corsIsTheDumbestThingEver(mux)))
 }
