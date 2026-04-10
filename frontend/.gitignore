@@ -1,3 +1,7 @@
+# nuxt rewrite stuff even though it is on a diffrent branch git goes crazy since it is not tracked on rewrite/nuxt
+.nuxt
+.output
+
 # Logs
 logs
 *.log
