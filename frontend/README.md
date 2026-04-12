@@ -1,6 +1,7 @@
 # ChatWS Frontend
-This is the vue frontend for ChatWS  
-The rest is from the template readme  
+This is the vue frontend for ChatWS. 
+Also ignore the error in tsconfig.node.json the error is false.   
+The rest is from the template readme.  
 ## Recommended IDE Setup
 
 [VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).

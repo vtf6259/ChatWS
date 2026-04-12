@@ -2,4 +2,5 @@
 cd frontend
 npm i
 npm run build
-cp -R dist ../build
+mkdir ../build/dist
+cp -R dist ../build/dist/ChatWS

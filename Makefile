@@ -5,7 +5,7 @@ frontend:
 backend:
 	./buildBackend.sh
 clean:
-	rm backend/ChatWS
-	rm -r build/ChatWS
-	rm -r frontend/dist
-	rm -r build/dist
+	rm -f backend/ChatWS
+	rm -f build/ChatWS
+	rm -rf frontend/dist
+	rm -rf build/dist

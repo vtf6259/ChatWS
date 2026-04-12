@@ -15,4 +15,5 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url))
     },
   },
+  base: "/ChatWS" // /ChatWS is for the offical frontend instance please change this for yourself
 })
