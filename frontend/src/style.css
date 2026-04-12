@@ -16,3 +16,12 @@ button {
 ul {
     list-style-type: none;
 }
+.flexrow {
+    display: flex;
+}
+.flexrowMember {
+    flex-direction: row;
+}
+.gap10px {
+    gap: 10px;
+}
