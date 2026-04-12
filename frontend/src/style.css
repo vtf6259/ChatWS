@@ -1,0 +1,18 @@
+:root {
+    background-color: #050505;
+    color: white;
+}
+input {
+    background-color: #414141;
+    color: inherit;
+    border: none;
+}
+button {
+    border: none;
+    border-radius: 10px;
+    background-color: #414141;
+    color: inherit;
+}
+ul {
+    list-style-type: none;
+}
