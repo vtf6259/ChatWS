@@ -1,11 +1,17 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { useTemplateRef } from 'vue';
+
+  const serverURI = useTemplateRef("serverURI")
+  let wsServer: WebSocket
+  function connect() {
+    if (serverURI.value == undefined) return
+    wsServer = new WebSocket(serverURI.value?.value)
+  }
+</script>
 
 <template>
-  <h1>You did it!</h1>
-  <p>
-    Visit <a href="https://vuejs.org/" target="_blank" rel="noopener">vuejs.org</a> to read the
-    documentation
-  </p>
+  <input ref="serverURI" placeholder="Server URL"/>
+  <button v-on:click="connect()">Connect</button>
 </template>
 
 <style scoped></style>
