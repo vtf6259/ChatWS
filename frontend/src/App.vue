@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { onMounted, ref, useTemplateRef } from 'vue';
-
+  import { onMounted, ref, useTemplateRef } from 'vue';
+  import { Key, PrivateKey, readKey, readPrivateKey } from 'openpgp'
   const serverURI = useTemplateRef("serverURI")
   const connectStatus = useTemplateRef("connectStatus")
   const username = useTemplateRef("username")
@@ -8,6 +8,8 @@ import { onMounted, ref, useTemplateRef } from 'vue';
   const privKeyRef = ref<HTMLInputElement | null>(null)
   let pgpPrivKey: string
   let pgpPubKey: string
+  let pubKey: Key
+  let privKey: PrivateKey
   let wsServer: WebSocket = new WebSocket("ws://0.0.0.0/aasjdioajsdoiajsdiajsdo")
   let messages = ref(<string[]>[])
   function genRecoverPhrase(pubkey: string, privkey: string) {
@@ -37,15 +39,24 @@ import { onMounted, ref, useTemplateRef } from 'vue';
       console.log(message)
     })
   }
-  function connect() {
+  async function connect() {
     if (serverURI.value == null || connectStatus.value == null || username.value == null || pubKeyRef.value == null || privKeyRef.value == null) {console.log("uhh"); return}
     if (serverURI.value.value == "" || username.value.value == "" || privKeyRef.value.value == "" || pubKeyRef.value.value == "") {
       connectStatus.value.innerText = "No empty feilds!" 
       setTimeout(() => {if (connectStatus.value == null) {console.log("uhh"); return}; connectStatus.value.innerText = "Disconnected"}, 2000)
       return
     }
+    connectStatus.value.innerText = "Reading pgp keys this might take a while (if you do not know what this means ignore it)"
     pgpPrivKey = atob(privKeyRef.value.value)
     pgpPubKey = atob(pubKeyRef.value.value)
+    //console.log(pgpPrivKey, "\n", pgpPubKey)
+    pubKey = await readKey({armoredKey: pgpPubKey})
+    privKey = await readPrivateKey({armoredKey: pgpPrivKey}) // key encryption is soon(tm)
+    console.log(privKey)
+    if (!privKey.isDecrypted()) {
+      connectStatus.value.innerText = "Private key encryption is not supported yet"
+      setTimeout(() => {if (connectStatus.value == null) {console.log("uhh"); return}; connectStatus.value.innerText = "Disconnected"}, 2000)
+    }
     wsServer = new WebSocket(serverURI.value.value)
     connectStatus.value.innerText = "Connecting"
     addEventListeners(wsServer) // this is needed otherwise it does not work
