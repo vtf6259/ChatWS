@@ -8,7 +8,7 @@ import { onMounted, ref, useTemplateRef } from 'vue';
   const privKeyRef = ref<HTMLInputElement | null>(null)
   let pgpPrivKey: string
   let pgpPubKey: string
-  let wsServer: WebSocket = new WebSocket("")
+  let wsServer: WebSocket = new WebSocket("ws://0.0.0.0/aasjdioajsdoiajsdiajsdo")
   let messages = ref(<string[]>[])
   function genRecoverPhrase(pubkey: string, privkey: string) {
     const encode = btoa(pubkey + ":" + privkey)
