@@ -46,8 +46,7 @@ import { onMounted, ref, useTemplateRef } from 'vue';
     }
     pgpPrivKey = atob(privKeyRef.value.value)
     pgpPubKey = atob(pubKeyRef.value.value)
-    console.log(pgpPrivKey, "\n", pgpPubKey)
-    wsServer = new WebSocket(serverURI.value?.value)
+    wsServer = new WebSocket(serverURI.value.value)
     connectStatus.value.innerText = "Connecting"
     addEventListeners(wsServer) // this is needed otherwise it does not work
   }
