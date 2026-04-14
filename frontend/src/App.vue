@@ -4,8 +4,8 @@ import { onMounted, ref, useTemplateRef } from 'vue';
   const serverURI = useTemplateRef("serverURI")
   const connectStatus = useTemplateRef("connectStatus")
   const username = useTemplateRef("username")
-  const pubKeyRef = useTemplateRef("pgpPubKey")
-  const privKeyRef = useTemplateRef("pgpPrivKey")
+  const pubKeyRef = ref<HTMLInputElement | null>(null)
+  const privKeyRef = ref<HTMLInputElement | null>(null)
   let pgpPrivKey: string
   let pgpPubKey: string
   let wsServer: WebSocket = new WebSocket("")
@@ -58,9 +58,8 @@ import { onMounted, ref, useTemplateRef } from 'vue';
   <div class="flexrow gap10px">
     <input class="flexrowMember" ref="serverURI" placeholder="Server URL">
     <input class="flexrowMember" ref="username" placeholder="Username">
-    <input class="flexrowMember" ref="pgpPubKey" placeholder="Base64 PGP Public Key">
-  <input class="flexrowMember" ref="pgpPrivKey" placeholder="Base64 PGP Private Key">
- 
+    <input class="flexrowMember" ref="pubKeyRef" placeholder="Base64 PGP Public Key">
+    <input class="flexrowMember" ref="privKeyRef" placeholder="Base64 PGP Private Key">
     <button class="flexrowMember" v-on:click="connect()">Connect</button>
   </div>
   <ul>
