@@ -12,15 +12,16 @@
   let privKey: PrivateKey
   let wsServer: WebSocket = new WebSocket("ws://0.0.0.0/aasjdioajsdoiajsdiajsdo")
   let messages = ref(<string[]>[])
-  function genRecoverPhrase(pubkey: string, privkey: string) {
-    const encode = btoa(pubkey + ":" + privkey)
-    
+  function genRecoverPhrase(pubkey: string) {
+    const encode = btoa(pubkey)
+    alert(encode)
   }
   onMounted(() => {
     const messagesLocalStorage = localStorage.getItem("messages")
     if (messagesLocalStorage != null) {
       messages.value = JSON.parse(messagesLocalStorage)
     }
+    ;(window as any).genRecoverPhrase = genRecoverPhrase;
   })
   function addEventListeners(websocket: WebSocket) {
     websocket.addEventListener("open", () => {
