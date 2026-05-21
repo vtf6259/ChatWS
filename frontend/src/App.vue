@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { onMounted, ref, useTemplateRef } from 'vue';
-  import { Key, PrivateKey, readKey, readPrivateKey } from 'openpgp'
+  import { readKey, readPrivateKey } from 'openpgp'
+  import type { Key, PrivateKey } from 'openpgp'
   const serverURI = useTemplateRef("serverURI")
   const connectStatus = useTemplateRef("connectStatus")
   const username = useTemplateRef("username")
