@@ -11,7 +11,7 @@
   let pgpPubKey: string
   let pubKey: Key
   let privKey: PrivateKey
-  let wsServer: WebSocket = new WebSocket("ws://0.0.0.0/aasjdioajsdoiajsdiajsdo")
+  let wsServer: WebSocket = new WebSocket("wss://0.0.0.0/aasjdioajsdoiajsdiajsdo")
   let messages = ref(<string[]>[])
   function genRecoverPhrase(privkey: string) {
     const encode = btoa(privkey)
