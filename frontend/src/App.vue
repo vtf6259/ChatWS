@@ -13,8 +13,8 @@
   let privKey: PrivateKey
   let wsServer: WebSocket = new WebSocket("ws://0.0.0.0/aasjdioajsdoiajsdiajsdo")
   let messages = ref(<string[]>[])
-  function genRecoverPhrase(pubkey: string) {
-    const encode = btoa(pubkey)
+  function genRecoverPhrase(privkey: string) {
+    const encode = btoa(privkey)
     alert(encode)
   }
   onMounted(() => {

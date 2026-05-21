@@ -5,9 +5,10 @@ on:
   push:
     branches:
       - master
+      - rewrite/vue
 jobs:
   build:
-    if: contains(github.event.head_commit.message, '[CI]')
+    if: "!contains(github.event.head_commit.message, '[SKIP CI]')"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
