@@ -1,7 +1,8 @@
-**Usage Policy for AI Agents**
+# Agent Instructions
 
-AI technology is restricted in its application within our operations. The following guidelines must be adhered to:
+Read `./STYLE.md` before writing any code in this repository.
 
-- **Minor Tasks Only**: AI is permitted to perform small, routine tasks that do not significantly impact overall outcomes.
-- **Error Correction**: AI may be utilized to identify and correct hard errors, ensuring accuracy and functionality.
-- **Limitations on Major Activities**: AI is not authorized to engage in large-scale projects or decision-making processes that require complex human judgment.
+If a containerized environment is detected, ask the user for a UID:GID to set file ownership to.
+
+- TypeScript: Follow the style guide; use global eslint rules.
+- Go: Follow the style guide; use `//nolint` for suppression.
