@@ -11,7 +11,7 @@
   let pgpPubKey: string
   let pubKey: Key
   let privKey: PrivateKey
-  let wsServer: WebSocket = new WebSocket("wss://0.0.0.0/aasjdioajsdoiajsdiajsdo")
+  let wsServer: WebSocket | null = null
   let messages = ref(<string[]>[])
   function genRecoverPhrase(privkey: string) {
     const encode = btoa(privkey)
@@ -27,7 +27,7 @@
   function addEventListeners(websocket: WebSocket) {
     websocket.addEventListener("open", () => {
       console.log("open")
-      if (connectStatus.value == null) return
+      if (connectStatus.value == null || wsServer == null) return
       wsServer.send("USER " + username.value?.value)
       connectStatus.value.innerText = "Connected"
     })
@@ -58,6 +58,7 @@
     if (!privKey.isDecrypted()) {
       connectStatus.value.innerText = "Private key encryption is not supported yet"
       setTimeout(() => {if (connectStatus.value == null) {console.log("uhh"); return}; connectStatus.value.innerText = "Disconnected"}, 2000)
+	  return
     }
     wsServer = new WebSocket(serverURI.value.value)
     connectStatus.value.innerText = "Connecting"
