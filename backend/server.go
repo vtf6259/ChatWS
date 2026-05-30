@@ -40,8 +40,17 @@ func getAuth(wsClient *websocket.Conn) bool {
 			user.randomText = randomText
 			user.username = messages[1] // TODO: Do bounds checking before 1.0
 			err := wsClient.WriteMessage(1, []byte("CHALLENGE "+randomText+" "+pgppubkeycrypto.GetHexKeyID()))
+			if err != nil {
+				wsClient.WriteMessage(1, []byte("500")) // dont really care if this gets to the client since there is already a error
+				return false
+			}	
 			prodLogln(err)
 			prodLogln(messages)
+			err = wsClient.WriteMessage(1, []byte("MOTD "+motd))
+			if err != nil {
+				wsClient.WriteMessage(1, []byte("500")) // this is only during auth since it is kindof messy i can put this in a function and put it everywhere for 1.0 
+				return false
+			}
 			prodLogln(sens(user))
 		case "AUTH":
 			prodLogln(sens(messages[1]))
@@ -99,7 +108,6 @@ func handleWSClient(httpClient http.ResponseWriter, httpRequest *http.Request) {
 		fmt.Printf("Websocket upgrade failed: %s\n", err.Error())
 		return
 	}
-	wsClient.WriteMessage(0, []byte("MOTD "+motd))
 	authDone := getAuth(wsClient)
 	if !authDone {
 		prodLogln(httpRequest.RemoteAddr + " Failed auth")
